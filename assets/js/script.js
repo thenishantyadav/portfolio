@@ -157,3 +157,27 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+
+// lightweight scroll reveal for key cards
+const revealTargets = document.querySelectorAll(
+  ".service-item, .project-card, .timeline-item, .architecture-card, .case-study-card"
+);
+
+if (revealTargets.length) {
+  revealTargets.forEach((el, idx) => {
+    el.classList.add("reveal");
+    el.style.transitionDelay = `${Math.min(idx * 35, 220)}ms`;
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  revealTargets.forEach((el) => observer.observe(el));
+}

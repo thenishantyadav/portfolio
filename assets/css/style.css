@@ -130,6 +130,10 @@ a { text-decoration: none; }
 li { list-style: none; }
 
 img, ion-icon, a, button, time, span { display: block; }
+img {
+  max-width: 100%;
+  height: auto;
+}
 
 button {
   font: inherit;
@@ -516,7 +520,11 @@ main {
 .navbar-link {
   color: var(--light-gray);
   font-size: var(--fs-8);
-  padding: 20px 7px;
+  min-height: 44px;
+  padding: 12px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: color var(--transition-1);
 }
 
@@ -1052,6 +1060,7 @@ main {
 
 .project-item > a:hover .project-img::before,
 .project-card:hover .project-img::before { background: hsla(0, 0%, 0%, 0.5); }
+.project-card:active { transform: scale(0.99); }
 
 .project-item-icon-box {
   --scale: 0.8;
@@ -1129,6 +1138,9 @@ main {
   border: 1px solid var(--jet);
   border-radius: 10px;
   padding: 7px 12px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   font-size: var(--fs-7);
   background: var(--eerie-black-1);
   transition: var(--transition-1);
@@ -1136,6 +1148,10 @@ main {
 
 .project-btn:hover {
   border-color: var(--orange-yellow-crayola);
+}
+
+.project-btn:active {
+  transform: scale(0.98);
 }
 
 .project-btn-muted {
@@ -1325,6 +1341,17 @@ main {
   color: var(--light-gray);
   line-height: 1.6;
   font-size: var(--fs-7);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .form-title { margin-bottom: 20px; }
@@ -1564,7 +1591,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .navbar-list { gap: 20px; }
 
-  .navbar-link { --fs-8: 14px; }
+  .navbar-link {
+    --fs-8: 14px;
+    padding: 12px 14px;
+  }
 
 
 
@@ -1763,7 +1793,10 @@ textarea.form-input::-webkit-resizer { display: none; }
    * NAVBAR
    */
 
-  .navbar-link { --fs-8: 15px; }
+  .navbar-link {
+    --fs-8: 15px;
+    padding: 14px 12px;
+  }
 
 
 
