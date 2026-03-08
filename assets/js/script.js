@@ -234,7 +234,9 @@ if (welcomeToast) {
 const cursorPreview = document.getElementById("cursorPreview");
 const cursorPreviewImg = cursorPreview ? cursorPreview.querySelector("img") : null;
 const previewTargets = document.querySelectorAll(".cursor-preview-target[data-image]");
-const canUseCursorPreview = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const hasHoverCapability = window.matchMedia("(hover: hover)").matches;
+const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+const canUseCursorPreview = hasHoverCapability && !isCoarsePointer;
 
 if (cursorPreview && cursorPreviewImg && previewTargets.length && canUseCursorPreview) {
   const offsetX = 24;
@@ -267,11 +269,11 @@ if (cursorPreview && cursorPreviewImg && previewTargets.length && canUseCursorPr
   };
 
   previewTargets.forEach((target) => {
-    target.addEventListener("mouseenter", () => showPreview(target.dataset.image));
-    target.addEventListener("mouseleave", hidePreview);
+    target.addEventListener("pointerenter", () => showPreview(target.dataset.image));
+    target.addEventListener("pointerleave", hidePreview);
   });
 
-  window.addEventListener("mousemove", (event) => {
+  window.addEventListener("pointermove", (event) => {
     targetX = event.clientX + offsetX;
     targetY = event.clientY + offsetY;
   });

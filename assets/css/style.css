@@ -2448,7 +2448,7 @@ article {
   transform: translate3d(var(--cursor-x, -9999px), var(--cursor-y, -9999px), 0) scale(1);
 }
 
-@media (hover: none), (pointer: coarse), (max-width: 1023px) {
+@media (hover: none), (pointer: coarse) {
   .cursor-preview {
     display: none !important;
   }
