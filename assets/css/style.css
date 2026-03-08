@@ -1287,6 +1287,46 @@ main {
   line-height: 1.6;
 }
 
+.architecture-section,
+.case-study-section {
+  margin-top: 24px;
+}
+
+.architecture-grid,
+.case-study-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.architecture-card,
+.case-study-card {
+  border: 1px solid var(--jet);
+  border-radius: 14px;
+  background: var(--eerie-black-1);
+  padding: 14px;
+}
+
+.architecture-card img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--jet);
+  margin-bottom: 10px;
+}
+
+.architecture-card .h4,
+.case-study-card .h4 {
+  margin-bottom: 8px;
+}
+
+.architecture-card p,
+.case-study-card p {
+  color: var(--light-gray);
+  line-height: 1.6;
+  font-size: var(--fs-7);
+}
+
 .form-title { margin-bottom: 20px; }
 
 .input-wrapper {
@@ -1773,6 +1813,11 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .project-list, .blog-posts-list { grid-template-columns: 1fr 1fr; }
 
+  .architecture-grid,
+  .case-study-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
 
 
   /**
@@ -1892,6 +1937,8 @@ textarea.form-input::-webkit-resizer { display: none; }
    */
 
   .project-list { grid-template-columns: repeat(3, 1fr); }
+
+  .architecture-grid { grid-template-columns: repeat(3, 1fr); }
 
 
 
