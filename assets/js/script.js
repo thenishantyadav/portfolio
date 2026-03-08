@@ -229,3 +229,52 @@ if (welcomeToast) {
     }, 4000);
   });
 }
+
+// cursor image preview (desktop/fine pointer only)
+const cursorPreview = document.getElementById("cursorPreview");
+const cursorPreviewImg = cursorPreview ? cursorPreview.querySelector("img") : null;
+const previewTargets = document.querySelectorAll(".cursor-preview-target[data-image]");
+const canUseCursorPreview = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+if (cursorPreview && cursorPreviewImg && previewTargets.length && canUseCursorPreview) {
+  const offsetX = 24;
+  const offsetY = 24;
+  let currentX = -9999;
+  let currentY = -9999;
+  let targetX = -9999;
+  let targetY = -9999;
+  let rafId = null;
+
+  const renderPreview = () => {
+    currentX += (targetX - currentX) * 0.2;
+    currentY += (targetY - currentY) * 0.2;
+    cursorPreview.style.setProperty("--cursor-x", `${currentX}px`);
+    cursorPreview.style.setProperty("--cursor-y", `${currentY}px`);
+    rafId = window.requestAnimationFrame(renderPreview);
+  };
+
+  const showPreview = (imageSrc) => {
+    if (!imageSrc) return;
+    cursorPreviewImg.src = imageSrc;
+    cursorPreview.classList.add("show");
+    if (!rafId) rafId = window.requestAnimationFrame(renderPreview);
+  };
+
+  const hidePreview = () => {
+    cursorPreview.classList.remove("show");
+    targetX = -9999;
+    targetY = -9999;
+  };
+
+  previewTargets.forEach((target) => {
+    target.addEventListener("mouseenter", () => showPreview(target.dataset.image));
+    target.addEventListener("mouseleave", hidePreview);
+  });
+
+  window.addEventListener("mousemove", (event) => {
+    targetX = event.clientX + offsetX;
+    targetY = event.clientY + offsetY;
+  });
+
+  window.addEventListener("blur", hidePreview);
+}
