@@ -256,3 +256,52 @@ if (cursorPreview && cursorPreviewImg && previewTargets.length && canUseCursorPr
 
   window.addEventListener("blur", hidePreview);
 }
+
+// premium interactive background + project tilt (desktop only)
+const parallaxBg = document.getElementById("parallaxBg");
+const parallaxLayerA = parallaxBg ? parallaxBg.querySelector(".layer-a") : null;
+const parallaxLayerB = parallaxBg ? parallaxBg.querySelector(".layer-b") : null;
+const interactiveProjectCards = document.querySelectorAll(".project-card");
+const canUsePremiumMotion = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+if (canUsePremiumMotion) {
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let rafToken = null;
+
+  const animateParallax = () => {
+    const nx = (mouseX / window.innerWidth) - 0.5;
+    const ny = (mouseY / window.innerHeight) - 0.5;
+
+    if (parallaxLayerA) {
+      parallaxLayerA.style.transform = `translate3d(${nx * -18}px, ${ny * -14}px, 0)`;
+    }
+    if (parallaxLayerB) {
+      parallaxLayerB.style.transform = `translate3d(${nx * 22}px, ${ny * 18}px, 0)`;
+    }
+
+    rafToken = null;
+  };
+
+  window.addEventListener("pointermove", (event) => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+    if (!rafToken) rafToken = window.requestAnimationFrame(animateParallax);
+  });
+
+  // optional subtle 3D card tilt
+  interactiveProjectCards.forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const px = ((event.clientX - rect.left) / rect.width) - 0.5;
+      const py = ((event.clientY - rect.top) / rect.height) - 0.5;
+      const tiltX = py * -5;
+      const tiltY = px * 6;
+      card.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px)`;
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.style.transform = "";
+    });
+  });
+}

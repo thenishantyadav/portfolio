@@ -2286,6 +2286,40 @@ body {
   letter-spacing: 0.01em;
 }
 
+.parallax-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.parallax-layer {
+  position: absolute;
+  width: 130vmax;
+  height: 130vmax;
+  border-radius: 50%;
+  filter: blur(2px);
+  transition: transform 140ms linear;
+  will-change: transform;
+}
+
+.parallax-bg .layer-a {
+  top: -42vmax;
+  left: -35vmax;
+  background:
+    radial-gradient(circle at 40% 45%, hsla(43, 95%, 63%, 0.12) 0%, hsla(43, 95%, 63%, 0) 52%),
+    radial-gradient(circle at 60% 60%, hsla(210, 70%, 55%, 0.08) 0%, hsla(210, 70%, 55%, 0) 64%);
+}
+
+.parallax-bg .layer-b {
+  bottom: -55vmax;
+  right: -38vmax;
+  background:
+    radial-gradient(circle at 55% 45%, hsla(260, 32%, 48%, 0.08) 0%, hsla(260, 32%, 48%, 0) 58%),
+    radial-gradient(circle at 40% 60%, hsla(190, 48%, 46%, 0.07) 0%, hsla(190, 48%, 46%, 0) 62%);
+}
+
 h1, h2, h3, h4, h5, h6,
 .name,
 .article-title,
@@ -2339,6 +2373,10 @@ article {
 .content-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-3);
+}
+
+.project-card {
+  transform-style: preserve-3d;
 }
 
 .navbar-link,
@@ -2449,6 +2487,10 @@ article {
 }
 
 @media (hover: none), (pointer: coarse) {
+  .parallax-bg {
+    display: none;
+  }
+
   .cursor-preview {
     display: none !important;
   }
