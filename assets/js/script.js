@@ -140,7 +140,6 @@ if (form && formInputs.length && formBtn) {
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 const pageNameToIndex = {};
-const mainContent = document.querySelector(".main-content");
 
 for (let i = 0; i < pages.length; i++) {
   pageNameToIndex[pages[i].dataset.page] = i;
@@ -169,8 +168,8 @@ if (pages.length && navigationLinks.length) {
       navigationLinks[navIndex].classList.add("active");
     });
   }, {
-    root: mainContent || null,
-    threshold: 0.55
+    root: null,
+    threshold: 0.35
   });
 
   pages.forEach((section) => {
@@ -199,7 +198,7 @@ if (revealTargets.length) {
       }
     });
   }, {
-    root: mainContent || null,
+    root: null,
     threshold: 0.14
   });
 

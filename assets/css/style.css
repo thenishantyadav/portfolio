@@ -217,9 +217,7 @@ article {
 
 article {
   display: block;
-  min-height: 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  min-height: auto;
 }
 
 @keyframes fade {
@@ -335,8 +333,7 @@ main {
 .main-content {
   position: relative;
   display: block;
-  gap: 16px;
-  padding-bottom: 82px;
+  padding-bottom: 20px;
 }
 
 
@@ -1946,6 +1943,14 @@ textarea.form-input::-webkit-resizer { display: none; }
     margin: auto;
   }
 
+  /* keep sidebar fixed on laptop/desktop during page scroll */
+  .sidebar {
+    position: sticky;
+    top: 24px;
+    max-height: max-content;
+    height: 100%;
+  }
+
 
 
   /**
@@ -2148,27 +2153,4 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .timeline-text { max-width: 700px; }
 
-}
-
-/* one-page overrides */
-@media (min-width: 580px) {
-  main { height: auto; }
-}
-
-@media (min-width: 768px) {
-  .main-content {
-    width: min(100%, 860px);
-    margin: 0 auto;
-    padding-bottom: 24px;
-  }
-}
-
-@media (min-width: 1250px) {
-  main { height: auto; }
-  .main-content {
-    height: auto;
-    overflow-y: visible;
-    scroll-snap-type: none;
-    padding-bottom: 10px;
-  }
 }
