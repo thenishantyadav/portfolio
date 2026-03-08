@@ -214,3 +214,16 @@ if (revealTargets.length) {
     revealTargets.forEach((el) => el.classList.add("is-visible"));
   }
 }
+
+// welcome popup on load (auto hide in 4 seconds)
+const welcomeToast = document.getElementById("welcomeToast");
+if (welcomeToast) {
+  window.addEventListener("load", () => {
+    welcomeToast.classList.add("show");
+
+    setTimeout(() => {
+      welcomeToast.classList.add("hide");
+      welcomeToast.classList.remove("show");
+    }, 4000);
+  });
+}
