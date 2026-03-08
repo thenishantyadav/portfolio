@@ -140,6 +140,7 @@ if (form && formInputs.length && formBtn) {
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 const pageNameToIndex = {};
+const mainContent = document.querySelector(".main-content");
 
 for (let i = 0; i < pages.length; i++) {
   pageNameToIndex[pages[i].dataset.page] = i;
@@ -151,24 +152,31 @@ for (let i = 0; i < navigationLinks.length; i++) {
     const targetName = this.innerHTML.toLowerCase();
     const pageIndex = pageNameToIndex[targetName];
     if (pageIndex === undefined) return;
-
-    for (let j = 0; j < pages.length; j++) {
-      const isTarget = j === pageIndex;
-      pages[j].classList.toggle("active", isTarget);
-      navigationLinks[j].classList.toggle("active", isTarget);
-    }
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    pages[pageIndex].scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 
-// align nav state with currently active section on first render
-for (let i = 0; i < pages.length; i++) {
-  if (pages[i].classList.contains("active")) {
-    navigationLinks.forEach((link) => link.classList.remove("active"));
-    if (navigationLinks[i]) navigationLinks[i].classList.add("active");
-    break;
-  }
+// keep nav highlight in sync with current section while scrolling
+if (pages.length && navigationLinks.length) {
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const pageName = entry.target.dataset.page;
+      const navIndex = pageNameToIndex[pageName];
+      if (navIndex === undefined) return;
+
+      navigationLinks.forEach((link) => link.classList.remove("active"));
+      navigationLinks[navIndex].classList.add("active");
+    });
+  }, {
+    root: mainContent || null,
+    threshold: 0.55
+  });
+
+  pages.forEach((section) => {
+    section.classList.add("section-reveal");
+    navObserver.observe(section);
+  });
 }
 
 
@@ -190,7 +198,10 @@ if (revealTargets.length) {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1 });
+  }, {
+    root: mainContent || null,
+    threshold: 0.14
+  });
 
   revealTargets.forEach((el) => observer.observe(el));
 }
