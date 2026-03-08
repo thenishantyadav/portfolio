@@ -141,6 +141,9 @@ const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 let activePageIndex = 0;
 let isScrollNavigating = false;
+let wheelAccumulator = 0;
+const SECTION_SWITCH_COOLDOWN_MS = 650;
+const WHEEL_THRESHOLD = 80;
 
 for (let i = 0; i < pages.length; i++) {
   if (pages[i].classList.contains("active")) {
@@ -159,7 +162,7 @@ const setActivePage = function (targetIndex) {
   }
 
   activePageIndex = targetIndex;
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo(0, 0);
 };
 
 // add event to all nav link
@@ -172,10 +175,14 @@ for (let i = 0; i < navigationLinks.length; i++) {
 // allow scrolling between sections (About -> Experience -> Projects -> Contact)
 window.addEventListener("wheel", function (event) {
   if (isScrollNavigating || pages.length < 2) return;
-  if (Math.abs(event.deltaY) < 20) return;
+  if (event.ctrlKey) return;
 
-  const direction = event.deltaY > 0 ? 1 : -1;
+  wheelAccumulator += event.deltaY;
+  if (Math.abs(wheelAccumulator) < WHEEL_THRESHOLD) return;
+
+  const direction = wheelAccumulator > 0 ? 1 : -1;
   const nextIndex = activePageIndex + direction;
+  wheelAccumulator = 0;
 
   if (nextIndex < 0 || nextIndex >= pages.length) return;
 
@@ -185,8 +192,37 @@ window.addEventListener("wheel", function (event) {
 
   setTimeout(() => {
     isScrollNavigating = false;
-  }, 500);
+  }, SECTION_SWITCH_COOLDOWN_MS);
 }, { passive: false });
+
+// swipe navigation for mobile (up/down to switch sections)
+let touchStartY = 0;
+let touchEndY = 0;
+const SWIPE_THRESHOLD = 55;
+
+window.addEventListener("touchstart", function (event) {
+  if (!event.touches || !event.touches.length) return;
+  touchStartY = event.touches[0].clientY;
+}, { passive: true });
+
+window.addEventListener("touchend", function (event) {
+  if (isScrollNavigating || pages.length < 2) return;
+  if (!event.changedTouches || !event.changedTouches.length) return;
+
+  touchEndY = event.changedTouches[0].clientY;
+  const deltaY = touchStartY - touchEndY;
+  if (Math.abs(deltaY) < SWIPE_THRESHOLD) return;
+
+  const direction = deltaY > 0 ? 1 : -1; // swipe up => next section
+  const nextIndex = activePageIndex + direction;
+  if (nextIndex < 0 || nextIndex >= pages.length) return;
+
+  isScrollNavigating = true;
+  setActivePage(nextIndex);
+  setTimeout(() => {
+    isScrollNavigating = false;
+  }, SECTION_SWITCH_COOLDOWN_MS);
+}, { passive: true });
 
 
 // lightweight scroll reveal for key cards
