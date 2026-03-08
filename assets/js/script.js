@@ -139,90 +139,40 @@ if (form && formInputs.length && formBtn) {
 // page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
-let activePageIndex = 0;
-let isScrollNavigating = false;
-let wheelAccumulator = 0;
-const SECTION_SWITCH_COOLDOWN_MS = 650;
-const WHEEL_THRESHOLD = 80;
+const pageNameToIndex = {};
 
 for (let i = 0; i < pages.length; i++) {
-  if (pages[i].classList.contains("active")) {
-    activePageIndex = i;
-    break;
-  }
+  // keep all sections visible for natural continuous scroll
+  pages[i].classList.add("active");
+  pageNameToIndex[pages[i].dataset.page] = i;
 }
-
-const setActivePage = function (targetIndex) {
-  if (targetIndex < 0 || targetIndex >= pages.length) return;
-
-  for (let i = 0; i < pages.length; i++) {
-    const isActive = i === targetIndex;
-    pages[i].classList.toggle("active", isActive);
-    navigationLinks[i].classList.toggle("active", isActive);
-  }
-
-  activePageIndex = targetIndex;
-  window.scrollTo(0, 0);
-};
 
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-    setActivePage(i);
+    const targetName = this.innerHTML.toLowerCase();
+    const pageIndex = pageNameToIndex[targetName];
+    if (pageIndex === undefined) return;
+    pages[pageIndex].scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 
-// allow scrolling between sections (About -> Experience -> Projects -> Contact)
-window.addEventListener("wheel", function (event) {
-  if (isScrollNavigating || pages.length < 2) return;
-  if (event.ctrlKey) return;
+// update nav active state while user scrolls naturally
+if (pages.length && navigationLinks.length) {
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const pageName = entry.target.dataset.page;
+      const navIndex = pageNameToIndex[pageName];
+      if (navIndex === undefined) return;
 
-  wheelAccumulator += event.deltaY;
-  if (Math.abs(wheelAccumulator) < WHEEL_THRESHOLD) return;
+      navigationLinks.forEach((link) => link.classList.remove("active"));
+      navigationLinks[navIndex].classList.add("active");
+    });
+  }, { threshold: 0.35 });
 
-  const direction = wheelAccumulator > 0 ? 1 : -1;
-  const nextIndex = activePageIndex + direction;
-  wheelAccumulator = 0;
-
-  if (nextIndex < 0 || nextIndex >= pages.length) return;
-
-  event.preventDefault();
-  isScrollNavigating = true;
-  setActivePage(nextIndex);
-
-  setTimeout(() => {
-    isScrollNavigating = false;
-  }, SECTION_SWITCH_COOLDOWN_MS);
-}, { passive: false });
-
-// swipe navigation for mobile (up/down to switch sections)
-let touchStartY = 0;
-let touchEndY = 0;
-const SWIPE_THRESHOLD = 55;
-
-window.addEventListener("touchstart", function (event) {
-  if (!event.touches || !event.touches.length) return;
-  touchStartY = event.touches[0].clientY;
-}, { passive: true });
-
-window.addEventListener("touchend", function (event) {
-  if (isScrollNavigating || pages.length < 2) return;
-  if (!event.changedTouches || !event.changedTouches.length) return;
-
-  touchEndY = event.changedTouches[0].clientY;
-  const deltaY = touchStartY - touchEndY;
-  if (Math.abs(deltaY) < SWIPE_THRESHOLD) return;
-
-  const direction = deltaY > 0 ? 1 : -1; // swipe up => next section
-  const nextIndex = activePageIndex + direction;
-  if (nextIndex < 0 || nextIndex >= pages.length) return;
-
-  isScrollNavigating = true;
-  setActivePage(nextIndex);
-  setTimeout(() => {
-    isScrollNavigating = false;
-  }, SECTION_SWITCH_COOLDOWN_MS);
-}, { passive: true });
+  pages.forEach((section) => sectionObserver.observe(section));
+}
 
 
 // lightweight scroll reveal for key cards
