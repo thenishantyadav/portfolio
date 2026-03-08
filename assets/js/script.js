@@ -142,8 +142,6 @@ const pages = document.querySelectorAll("[data-page]");
 const pageNameToIndex = {};
 
 for (let i = 0; i < pages.length; i++) {
-  // keep all sections visible for natural continuous scroll
-  pages[i].classList.add("active");
   pageNameToIndex[pages[i].dataset.page] = i;
 }
 
@@ -153,25 +151,24 @@ for (let i = 0; i < navigationLinks.length; i++) {
     const targetName = this.innerHTML.toLowerCase();
     const pageIndex = pageNameToIndex[targetName];
     if (pageIndex === undefined) return;
-    pages[pageIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+
+    for (let j = 0; j < pages.length; j++) {
+      const isTarget = j === pageIndex;
+      pages[j].classList.toggle("active", isTarget);
+      navigationLinks[j].classList.toggle("active", isTarget);
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
-// update nav active state while user scrolls naturally
-if (pages.length && navigationLinks.length) {
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const pageName = entry.target.dataset.page;
-      const navIndex = pageNameToIndex[pageName];
-      if (navIndex === undefined) return;
-
-      navigationLinks.forEach((link) => link.classList.remove("active"));
-      navigationLinks[navIndex].classList.add("active");
-    });
-  }, { threshold: 0.35 });
-
-  pages.forEach((section) => sectionObserver.observe(section));
+// align nav state with currently active section on first render
+for (let i = 0; i < pages.length; i++) {
+  if (pages[i].classList.contains("active")) {
+    navigationLinks.forEach((link) => link.classList.remove("active"));
+    if (navigationLinks[i]) navigationLinks[i].classList.add("active");
+    break;
+  }
 }
 
 
