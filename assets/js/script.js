@@ -148,7 +148,7 @@ for (let i = 0; i < pages.length; i++) {
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-    const targetName = this.innerHTML.toLowerCase();
+    const targetName = (this.dataset.target || this.innerHTML).toLowerCase();
     const pageIndex = pageNameToIndex[targetName];
     if (pageIndex === undefined) return;
     pages[pageIndex].scrollIntoView({ behavior: "smooth", block: "start" });
@@ -157,25 +157,31 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
 // keep nav highlight in sync with current section while scrolling
 if (pages.length && navigationLinks.length) {
-  const navObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const pageName = entry.target.dataset.page;
-      const navIndex = pageNameToIndex[pageName];
-      if (navIndex === undefined) return;
+  if ("IntersectionObserver" in window) {
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const pageName = entry.target.dataset.page;
+        const navIndex = pageNameToIndex[pageName];
+        if (navIndex === undefined) return;
 
-      navigationLinks.forEach((link) => link.classList.remove("active"));
-      navigationLinks[navIndex].classList.add("active");
+        navigationLinks.forEach((link) => link.classList.remove("active"));
+        navigationLinks[navIndex].classList.add("active");
+      });
+    }, {
+      root: null,
+      threshold: 0.35
     });
-  }, {
-    root: null,
-    threshold: 0.35
-  });
 
-  pages.forEach((section) => {
-    section.classList.add("section-reveal");
-    navObserver.observe(section);
-  });
+    pages.forEach((section) => {
+      section.classList.add("section-reveal");
+      navObserver.observe(section);
+    });
+  } else {
+    // Fallback for old browsers
+    pages.forEach((section) => section.classList.add("is-visible"));
+    if (navigationLinks[0]) navigationLinks[0].classList.add("active");
+  }
 }
 
 
@@ -185,22 +191,26 @@ const revealTargets = document.querySelectorAll(
 );
 
 if (revealTargets.length) {
-  revealTargets.forEach((el, idx) => {
-    el.classList.add("reveal");
-    el.style.transitionDelay = `${Math.min(idx * 35, 220)}ms`;
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
+  if ("IntersectionObserver" in window) {
+    revealTargets.forEach((el, idx) => {
+      el.classList.add("reveal");
+      el.style.transitionDelay = `${Math.min(idx * 35, 220)}ms`;
     });
-  }, {
-    root: null,
-    threshold: 0.14
-  });
 
-  revealTargets.forEach((el) => observer.observe(el));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.14
+    });
+
+    revealTargets.forEach((el) => observer.observe(el));
+  } else {
+    revealTargets.forEach((el) => el.classList.add("is-visible"));
+  }
 }

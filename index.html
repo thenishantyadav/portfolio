@@ -158,23 +158,24 @@
       -->
 
       <nav class="navbar">
+        <h2 class="sr-only">Primary Navigation</h2>
 
         <ul class="navbar-list">
 
           <li class="navbar-item">
-            <button class="navbar-link  active" data-nav-link>About</button>
+            <button class="navbar-link  active" data-nav-link data-target="about" type="button">About</button>
           </li>
 
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Experience</button>
+            <button class="navbar-link" data-nav-link data-target="experience" type="button">Experience</button>
           </li>
 
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Projects</button>
+            <button class="navbar-link" data-nav-link data-target="projects" type="button">Projects</button>
           </li>
 
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Contact</button>
+            <button class="navbar-link" data-nav-link data-target="contact" type="button">Contact</button>
           </li>
 
         </ul>
@@ -189,7 +190,7 @@
         - #ABOUT
       -->
 
-      <article class="about  active" data-page="about">
+      <article class="about  active" data-page="about" id="about">
 
         <header>
           <h2 class="h2 article-title">About me</h2>
@@ -284,7 +285,7 @@
         - #RESUME
       -->
 
-      <article class="resume" data-page="experience">
+      <article class="resume" data-page="experience" id="experience">
 
         <header>
           <h2 class="h2 article-title">Experience</h2>
@@ -579,7 +580,7 @@
         - #PORTFOLIO
       -->
 
-      <article class="portfolio" data-page="projects">
+      <article class="portfolio" data-page="projects" id="projects">
 
         <header>
           <h2 class="h2 article-title">Projects</h2>
@@ -665,7 +666,7 @@
                 </ul>
                 <div class="project-actions">
                   <a href="https://github.com/thenishantyadav/AlgorithmVisualizer" target="_blank" rel="noopener noreferrer" class="project-btn">GitHub</a>
-                  <span class="project-btn project-btn-muted">Live Demo (Coming Soon)</span>
+                  <button class="project-btn project-btn-muted" type="button" disabled>Live Demo (Coming Soon)</button>
                 </div>
 
               </div>
@@ -692,7 +693,7 @@
                 </ul>
                 <div class="project-actions">
                   <a href="https://github.com/thenishantyadav/mern-netflix-clone" target="_blank" rel="noopener noreferrer" class="project-btn">GitHub</a>
-                  <span class="project-btn project-btn-muted">Live Demo (Coming Soon)</span>
+                  <button class="project-btn project-btn-muted" type="button" disabled>Live Demo (Coming Soon)</button>
                 </div>
 
               </div>
@@ -719,7 +720,7 @@
                 </ul>
                 <div class="project-actions">
                   <a href="https://github.com/thenishantyadav" target="_blank" rel="noopener noreferrer" class="project-btn">GitHub</a>
-                  <span class="project-btn project-btn-muted">In Progress</span>
+                  <button class="project-btn project-btn-muted" type="button" disabled>Demo (In Progress)</button>
                 </div>
 
               </div>
@@ -779,7 +780,7 @@
         - #CONTACT
       -->
 
-      <article class="contact" data-page="contact">
+      <article class="contact" data-page="contact" id="contact">
 
         <header>
           <h2 class="h2 article-title">Contact</h2>
