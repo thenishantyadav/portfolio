@@ -1977,8 +1977,11 @@ textarea.form-input::-webkit-resizer { display: none; }
   .sidebar {
     position: sticky;
     top: 24px;
-    max-height: max-content;
-    height: 100%;
+    height: calc(100vh - 48px);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
   }
 
 
@@ -2116,8 +2119,11 @@ textarea.form-input::-webkit-resizer { display: none; }
   .sidebar {
     position: sticky;
     top: 60px;
-    max-height: max-content;
-    height: 100%;
+    height: calc(100vh - 84px);
+    max-height: calc(100vh - 84px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
     margin-bottom: 0;
     padding-top: 60px;
     z-index: 1;
