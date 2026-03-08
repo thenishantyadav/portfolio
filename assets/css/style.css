@@ -471,6 +471,11 @@ main {
   padding-left: 7px;
 }
 
+.profile-social-list {
+  margin-top: 12px;
+  padding-left: 0;
+}
+
 .social-item .social-link {
   color: var(--light-gray-70);
   font-size: 18px;
@@ -2007,9 +2012,9 @@ textarea.form-input::-webkit-resizer { display: none; }
   .contacts-list { grid-template-columns: 1fr; }
 
   .contact-info :is(.contact-link) {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .contact-info :is(.contact-link, time, address) {
@@ -2023,6 +2028,8 @@ textarea.form-input::-webkit-resizer { display: none; }
   }
 
   .social-list { justify-content: center; }
+
+  .profile-social-list { justify-content: center; }
 
 
 
