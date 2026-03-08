@@ -139,24 +139,54 @@ if (form && formInputs.length && formBtn) {
 // page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
+let activePageIndex = 0;
+let isScrollNavigating = false;
+
+for (let i = 0; i < pages.length; i++) {
+  if (pages[i].classList.contains("active")) {
+    activePageIndex = i;
+    break;
+  }
+}
+
+const setActivePage = function (targetIndex) {
+  if (targetIndex < 0 || targetIndex >= pages.length) return;
+
+  for (let i = 0; i < pages.length; i++) {
+    const isActive = i === targetIndex;
+    pages[i].classList.toggle("active", isActive);
+    navigationLinks[i].classList.toggle("active", isActive);
+  }
+
+  activePageIndex = targetIndex;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-
-    for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
-        pages[i].classList.add("active");
-        navigationLinks[i].classList.add("active");
-        window.scrollTo(0, 0);
-      } else {
-        pages[i].classList.remove("active");
-        navigationLinks[i].classList.remove("active");
-      }
-    }
-
+    setActivePage(i);
   });
 }
+
+// allow scrolling between sections (About -> Experience -> Projects -> Contact)
+window.addEventListener("wheel", function (event) {
+  if (isScrollNavigating || pages.length < 2) return;
+  if (Math.abs(event.deltaY) < 20) return;
+
+  const direction = event.deltaY > 0 ? 1 : -1;
+  const nextIndex = activePageIndex + direction;
+
+  if (nextIndex < 0 || nextIndex >= pages.length) return;
+
+  event.preventDefault();
+  isScrollNavigating = true;
+  setActivePage(nextIndex);
+
+  setTimeout(() => {
+    isScrollNavigating = false;
+  }, 500);
+}, { passive: false });
 
 
 // lightweight scroll reveal for key cards
