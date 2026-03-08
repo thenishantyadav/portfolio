@@ -2118,14 +2118,14 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .sidebar {
     position: sticky;
-    top: 60px;
-    height: calc(100vh - 84px);
-    max-height: calc(100vh - 84px);
+    top: 24px;
+    height: calc(100vh - 48px);
+    max-height: calc(100vh - 48px);
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
     margin-bottom: 0;
-    padding-top: 60px;
+    padding-top: 0;
     z-index: 1;
   }
 
@@ -2220,10 +2220,14 @@ textarea.form-input::-webkit-resizer { display: none; }
 @media (max-width: 767px) {
   .sidebar {
     max-height: 250px;
+    overflow: hidden;
   }
 
   .sidebar.active {
-    max-height: 760px;
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
   }
 
   .sidebar-info {
