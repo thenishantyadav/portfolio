@@ -353,6 +353,16 @@ main {
 .avatar-box {
   background: var(--bg-gradient-onyx);
   border-radius: 20px;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+}
+
+.avatar-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
 }
 
 .info-content .name {
@@ -1468,7 +1478,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .avatar-box { border-radius: 30px; }
 
-  .avatar-box img { width: 120px; }
+  .avatar-box {
+    width: 120px;
+    height: 120px;
+  }
 
   .info-content .name { margin-bottom: 15px; }
 
@@ -1969,7 +1982,10 @@ textarea.form-input::-webkit-resizer { display: none; }
     text-align: center;
   }
 
-  .avatar-box img { width: 150px; }
+  .avatar-box {
+    width: 150px;
+    height: 150px;
+  }
 
   .info-content .name {
     white-space: nowrap;
