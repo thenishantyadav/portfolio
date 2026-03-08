@@ -2421,9 +2421,9 @@ article {
 
 .cursor-preview {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 190px;
+  right: 26px;
+  top: 50%;
+  width: min(360px, 32vw);
   aspect-ratio: 16 / 10;
   border-radius: 12px;
   overflow: hidden;
@@ -2433,7 +2433,7 @@ article {
   pointer-events: none;
   z-index: 1300;
   opacity: 0;
-  transform: translate3d(-9999px, -9999px, 0) scale(0.96);
+  transform: translateY(-50%) scale(0.96);
   transition: opacity 220ms ease, transform 220ms ease;
 }
 
@@ -2445,7 +2445,7 @@ article {
 
 .cursor-preview.show {
   opacity: 1;
-  transform: translate3d(var(--cursor-x, -9999px), var(--cursor-y, -9999px), 0) scale(1);
+  transform: translateY(-50%) scale(1);
 }
 
 @media (hover: none), (pointer: coarse) {
